@@ -37,7 +37,26 @@ const login = async (req, res) => {
 
 }
 
+const showall = async(req, res, next) => {
+    let {email, password} = req.body;
+    let userExists = await Users.findOne({email});
+    if(userExists){
+        if(email === "abc@xyz.com" ){
+            if(userExists.password == password){
+                let AllUsers = await Users.find();
+                return res.status(200).send(AllUsers);
+            }else{
+                return res.status(401).send({message: "Password did not match"});
+            }
+        }
+        else{
+            return res.status(401).send({message: "you are not authorized"});
+        }
+    }
+}
+
 module.exports = {
     register,
-    login
+    login,
+    showall
 }
